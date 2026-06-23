@@ -1,26 +1,63 @@
 
 import sys
 import pandas as pd
+from sklearn.linear_model import LinearRegression
+from sklearn.compose import ColumnTransformer
+from sklearn.pipeline import Pipeline
+from sklearn.impute import SimpleImputer
+from sklearn.preprocessing import OneHotEncoder, StandardScaler
 from src.exception import CustomException
-from src.utils import load_object
+
 
 class PredictPipeline:
     def __init__(self):
-        pass
+        self.model = None
+        self.preprocessor = None
+        self._build_pipeline()
+
+    def _build_pipeline(self):
+        try:
+            categorical_features = ['gender', 'race_ethnicity', 'parental_level_of_education', 'lunch', 'test_preparation_course']
+            numeric_features = ['reading_score', 'writing_score']
+
+            categorical_transformer = Pipeline(
+                steps=[
+                    ('imputer', SimpleImputer(strategy='most_frequent')),
+                    ('onehot', OneHotEncoder(handle_unknown='ignore'))
+                ]
+            )
+
+            numeric_transformer = Pipeline(
+                steps=[
+                    ('imputer', SimpleImputer(strategy='median')),
+                    ('scaler', StandardScaler())
+                ]
+            )
+
+            preprocessor = ColumnTransformer(
+                transformers=[
+                    ('cat', categorical_transformer, categorical_features),
+                    ('num', numeric_transformer, numeric_features)
+                ]
+            )
+
+            model = LinearRegression()
+
+            self.preprocessor = preprocessor
+            self.model = Pipeline(steps=[('preprocessor', preprocessor), ('regressor', model)])
+
+            # Train a simple model from the local dataset for local use.
+            df = pd.read_csv('notebook/data/stud.csv')
+            X = df[['gender', 'race_ethnicity', 'parental_level_of_education', 'lunch', 'test_preparation_course', 'reading_score', 'writing_score']]
+            y = df['math_score']
+            self.model.fit(X, y)
+
+        except Exception as e:
+            raise CustomException(e, sys)
 
     def predict(self, features):
         try:
-            preprocessor_path = 'artifacts/preprocessor.pkl'
-            model_path = 'artifacts/model.pkl'
-
-            preprocessor = load_object(file_path=preprocessor_path)
-            model = load_object(file_path=model_path)
-
-            data_scaled = preprocessor.transform(features)
-
-            pred = model.predict(data_scaled)
-
-            return pred
+            return self.model.predict(features)
 
         except Exception as e:
             raise CustomException(e, sys)

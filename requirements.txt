@@ -3,6 +3,5 @@ numpy
 seaborn
 scikit-learn
 dill
-Flask
-gunicorn
+streamlit
 # -e .

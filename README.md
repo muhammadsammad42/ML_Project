@@ -1,15 +1,20 @@
 ## End to End Machine Learning Project
 
-## Railway Deployment
+## Streamlit Deployment
 
-This project is prepared for Railway deployment.
+This project is prepared for Streamlit deployment.
 
 ### Files added
-- Procfile
-- application.py as the Flask entry point
+- streamlit_app.py as the Streamlit entry point
+- .streamlit/config.toml
 
-### Railway setup
-1. Create a new project on Railway.
+### Run locally
+1. Install dependencies:
+   - `pip install -r requirements.txt`
+2. Start the app:
+   - `streamlit run streamlit_app.py`
+
+### Streamlit Cloud setup
+1. Create a new app on Streamlit Cloud.
 2. Connect this GitHub repository.
-3. Use the start command:
-   - `gunicorn application:app`
+3. Set the main file to `streamlit_app.py`.
