@@ -128,3 +128,13 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Project specific
+artifacts/
+logs/
+ML_Project.egg-info/
+catboost_info/
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
