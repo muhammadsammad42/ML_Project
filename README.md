@@ -1,15 +1,15 @@
 ## End to End Machine Learning Project
 
-## Render Deployment
+## Railway Deployment
 
-This project is prepared for Render deployment.
+This project is prepared for Railway deployment.
 
 ### Files added
-- render.yaml
+- Procfile
 - application.py as the Flask entry point
 
-### Render setup
-1. Create a new Web Service on Render.
+### Railway setup
+1. Create a new project on Railway.
 2. Connect this GitHub repository.
 3. Use the start command:
    - `gunicorn application:app`
